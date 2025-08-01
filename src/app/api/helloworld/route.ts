@@ -1,8 +1,20 @@
 import axios from 'axios';
+import { cookies } from 'next/headers';
+import { NextRequest } from 'next/server';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const res = await axios.get('https://jsonplaceholder.typicode.com/posts/1');
+    const BASE_URL = "http://localhost:8080/api";
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('token')?.value;
+
+    const res = await axios.get(`${BASE_URL}/hello`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
     const data = res.data;
     return Response.json(data);
   } catch (error: any) {
