@@ -34,20 +34,25 @@ const Hello = () => {
           const bc = new BroadcastChannel("logout");
           bc.onmessage = (event) => {
                if (event.data.message === "out") {
-                    router.push("/user/login"); 
+                    router.push("/user/login");
                }
           };
           return () => bc.close();
      }, []);
 
      return (
-
           <div>
-             {loading && <p>Loading...</p>}
-             {!loading && <h1 className="text-red-500 font-bold text-center text-3xl">Hi This is akshat c: {message}</h1>
-               && <LogOutButton />
-             }
+               {loading && <p>Loading...</p>}
+               {!loading && (
+                    <>
+                         <h1 className="text-red-500 font-bold text-center text-3xl">
+                              Hi This is akshat c: {message}
+                         </h1>
+                         <LogOutButton />
+                    </>
+               )}
           </div>
      );
+
 };
 export default Hello;

@@ -5,14 +5,18 @@ export function middleware(req: NextRequest) {
 
      const pathname = req.nextUrl.pathname;
 
-     const isProtected = pathname.startsWith('/dashboard') || pathname.startsWith('/admin');
+     const isProtected = pathname.startsWith('/hello') || pathname.startsWith('/admin');
 
      if(pathname === '/user/login' && token) {
           return NextResponse.redirect(new URL('/hello', req.url));
      }
 
+     if(pathname === '/user/register' && token) {
+          return NextResponse.redirect(new URL("/hello", req.url));
+     }
+
      if(!token && isProtected) {
-          return NextResponse.redirect(new URL('/login', req.url));
+          return NextResponse.redirect(new URL('/user/login', req.url));
      }
 
 
@@ -20,5 +24,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/user/login', '/dashboard/:path*', '/admin/:path*'],
+  matcher: ['/user/login', '/hello/:path*', '/admin/:path*', '/user/register'],
 }
