@@ -14,7 +14,6 @@ const Hello = () => {
      useEffect(() => {
           const fetchData = async () => {
                try {
-                    const token = localStorage.getItem("token");
                     const response = await axios.get('/api/helloworld', {
                          withCredentials: true
                     });

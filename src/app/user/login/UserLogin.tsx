@@ -3,34 +3,65 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const Login = () => {
 
-     const [username, setUsername] = useState("");
+     const [email, setEmailLocal] = useState("");
      const [password, setPassword] = useState("");
      const [errorMessage, setErrorMessage] = useState("");
      const [successMessage, setSuccessMessage] = useState("");
 
+     const setEmail = useAuthStore((state) => state.setEmail);
      const router = useRouter();
 
+     const validateInputs = () => {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          if (!email.trim()) {
+               setErrorMessage("Email is required.");
+               return false;
+          }
+          if (!emailRegex.test(email)) {
+               setErrorMessage("Please enter a valid email address.");
+               return false;
+          }
+
+          if (!password.trim()) {
+               setErrorMessage("Password is required.");
+               return false;
+          }
+          if (password.length < 6) {
+               setErrorMessage("Password must be at least 6 characters long.");
+               return false;
+          }
+
+          setErrorMessage(""); 
+          return true;
+     };
+
      const handleLogin = async () => {
+          if (!validateInputs()){
+               return;
+          }
           try {
-               const response = await axios.post('/api/user/login', { username, password })
+               const response = await axios.post('/api/user/login', { email, password })
                console.log(response.status);
-               if (response.status == 200) {
+               if (response.status == 202) {
+                    setEmail(email);
+
                     setErrorMessage("");
-                    setSuccessMessage("Login Successfull");
-                    router.push("/hello")
+                    setSuccessMessage("Please provide OTP on next step");
+                    router.push("/user/verify-otp")
                }
           } catch (error: any) {
                setSuccessMessage("");
-               if (error.response) {
-                    if (error.response.status === 401) {
-                         setErrorMessage("Invalid username or password. please try again");
-                         return;
-                    }
+               if (axios.isAxiosError(error) && error.response) {
+                    const errorMessage = error.response.data.message;
+                    setErrorMessage(errorMessage);
+               } else {
+                    setErrorMessage("Logging error. Please check your network connection.");
                }
-               setErrorMessage("Logging error");
           }
      }
 
@@ -40,12 +71,12 @@ const Login = () => {
                     <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Welcome Back</h2>
                     <form className="space-y-5">
                          <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                               <input
                                    type="text"
                                    className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                                    placeholder="Enter your username"
-                                   onChange={(e) => setUsername(e.target.value)}
+                                   onChange={(e) => setEmailLocal(e.target.value)}
                               />
                          </div>
 

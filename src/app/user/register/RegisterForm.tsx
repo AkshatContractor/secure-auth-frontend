@@ -11,8 +11,43 @@ const Register = () => {
      const [email, setEmail] = useState("");
      const [errorMessage, setErrorMessage] = useState("");
      const [successMessage, setSuccessMessage] = useState("");
+     const validateInputs = () => {
+          
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          if (!username.trim()) {
+               setErrorMessage("Username is required.");
+               return false;
+          }
+          if (username.length < 3) {
+               setErrorMessage("Username must be at least 3 characters long.");
+               return false;
+          }
+
+          if (!email.trim()) {
+               setErrorMessage("Email is required.");
+               return false;
+          }
+          if (!emailRegex.test(email)) {
+               setErrorMessage("Please enter a valid email address.");
+               return false;
+          }
+
+          if (!password.trim()) {
+               setErrorMessage("Password is required.");
+               return false;
+          }
+          if (password.length < 6) {
+               setErrorMessage("Password must be at least 6 characters long.");
+               return false;
+          }
+
+          setErrorMessage("");
+          return true;
+     };
 
      const handleRegister = async () => {
+          if (!validateInputs()) return;
           try {
                const response = await axios.post('/api/user/register', {
                     username,
