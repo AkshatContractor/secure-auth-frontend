@@ -48,7 +48,7 @@ export default function Dashboard() {
             <li>OAuth2 login (Google, GitHub, etc.)</li>
             <li>Short-lived access tokens + refresh token rotation</li>
             <li>TOTP / SMS-based 2FA</li>
-            <li>Enhanced dashboard with user activity & audit trails</li>
+            <li>Enhanced dashboard with user activity</li>
           </ul>
         </section>
 

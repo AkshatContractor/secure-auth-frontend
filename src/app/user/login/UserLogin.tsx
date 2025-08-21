@@ -5,6 +5,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 
+import ForgotPasswordLink from "@/app/components/ForgotPasswordLink";
+
 const Login = () => {
 
      const [email, setEmailLocal] = useState("");
@@ -89,6 +91,7 @@ const Login = () => {
                                    onChange={(e) => setPassword(e.target.value)}
                                    required
                               />
+                              <ForgotPasswordLink/>
                          </div>
 
                          <button
